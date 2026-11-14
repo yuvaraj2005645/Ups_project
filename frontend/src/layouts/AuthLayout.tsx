@@ -1,0 +1,128 @@
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Truck } from 'lucide-react';
+
+export const AuthLayout: React.FC = () => {
+  return (
+    <main className="auth-shell">
+      <aside className="auth-brand-panel">
+        <div className="auth-brand-content">
+          <div className="auth-brand-lockup">
+            <div className="auth-brand-mark">
+              <Truck aria-hidden="true" />
+            </div>
+            <div>
+              <div className="auth-brand-name">FleetOps</div>
+              <div className="auth-brand-subtitle">
+                Enterprise Route &amp; Vehicle Capacity Management
+              </div>
+            </div>
+          </div>
+
+          <div className="auth-brand-message">
+            <p className="auth-eyebrow">LOGISTICS, IN MOTION</p>
+            <h1>Manage Your Logistics Operations in One Platform</h1>
+            <p className="auth-brand-description">
+              Track shipments, manage fleet, drivers, routes, customers and deliveries with FleetOps.
+            </p>
+          </div>
+
+          <div className="auth-illustration" aria-hidden="true">
+            <svg viewBox="0 0 760 390" role="presentation">
+              <defs>
+                <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#1c4d83" stopOpacity=".72" />
+                  <stop offset="1" stopColor="#0b1f3a" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="truckBody" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#ffffff" />
+                  <stop offset="1" stopColor="#cbdcf0" />
+                </linearGradient>
+                <linearGradient id="truckCab" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor="#60a5fa" />
+                  <stop offset="1" stopColor="#2563eb" />
+                </linearGradient>
+                <filter id="truckShadow" x="-20%" y="-30%" width="140%" height="180%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="9" />
+                  <feOffset dy="9" />
+                  <feComponentTransfer>
+                    <feFuncA type="linear" slope=".28" />
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <ellipse cx="390" cy="330" rx="300" ry="33" fill="#020b18" opacity=".28" />
+              <path d="M25 295C130 235 215 295 310 242s188-54 276-104 115-35 152-10" fill="none" stroke="#60a5fa" strokeWidth="2" strokeDasharray="3 9" opacity=".72" />
+              <path d="M26 295C130 235 215 295 310 242s188-54 276-104 115-35 152-10" fill="none" stroke="#bfdbfe" strokeWidth="1" opacity=".32" />
+
+              <g opacity=".66">
+                <path d="M53 236v-89h52v89m12 0V117h70v119m11 0v-67h48v67m315 0V129h52v107m12 0V93h63v143m12 0v-78h47v78" fill="#153d68" stroke="#4b83b9" strokeWidth="1" />
+                <path d="M63 159h9m11 0h9m-29 17h9m11 0h9m-29 17h9m11 0h9m36-57h10m12 0h10m-32 19h10m12 0h10m-32 19h10m12 0h10m-32 19h10m12 0h10m315-37h9m12 0h9m-30 20h9m12 0h9m-30 19h9m12 0h9m-30 19h9m12 0h9m27-98h10m12 0h10m-32 20h10m12 0h10m-32 20h10m12 0h10m-32 20h10m12 0h10" stroke="#8dbff0" strokeWidth="3" opacity=".62" />
+              </g>
+
+              <g opacity=".85">
+                <path d="M470 237v-83l51-35 51 35v83z" fill="#214f78" stroke="#76a7d4" strokeWidth="1.5" />
+                <path d="M458 156l63-44 64 44" fill="none" stroke="#9cc5eb" strokeWidth="3" />
+                <path d="M491 172h19v26h-19zm36 0h19v26h-19zm-18 44h22v21h-22z" fill="#8fc7f5" opacity=".65" />
+                <path d="M582 237v-62l40-26 40 26v62z" fill="#1b456f" stroke="#76a7d4" strokeWidth="1.5" />
+                <path d="M573 177l49-33 50 33" fill="none" stroke="#9cc5eb" strokeWidth="3" />
+                <path d="M595 190h15v20h-15zm27 0h15v20h-15z" fill="#8fc7f5" opacity=".6" />
+              </g>
+
+              <path d="M72 287h616" stroke="#79a8d1" strokeWidth="2" opacity=".46" />
+              <path d="M92 310h576" stroke="#8db5d8" strokeWidth="1" strokeDasharray="30 18" opacity=".38" />
+
+              <g transform="translate(178 163)" filter="url(#truckShadow)">
+                <path d="M15 31a7 7 0 0 1 7-7h224a7 7 0 0 1 7 7v103H15z" fill="url(#truckBody)" />
+                <path d="M28 43h201v76H28z" fill="#eaf2fb" />
+                <path d="M48 53h164v2H48zm0 10h164v2H48zm0 10h164v2H48zm0 10h164v2H48zm0 10h164v2H48zm0 10h164v2H48z" fill="#c6d8ec" opacity=".75" />
+                <path d="M253 72h46l40 44v18h-86z" fill="url(#truckCab)" />
+                <path d="M269 82h26l25 27h-51z" fill="#c7e4ff" />
+                <path d="M300 82l24 27h-24z" fill="#9dccf3" />
+                <path d="M264 139h75v-5h-86v5z" fill="#a8bfd8" />
+                <path d="M325 119h12v8h-12z" fill="#dbeafe" />
+                <path d="M12 133h329v8H12z" fill="#1e3a5f" />
+                <circle cx="74" cy="145" r="20" fill="#12263c" />
+                <circle cx="74" cy="145" r="9" fill="#a9bdd1" />
+                <circle cx="287" cy="145" r="20" fill="#12263c" />
+                <circle cx="287" cy="145" r="9" fill="#a9bdd1" />
+                <path d="M313 116h20v7h-20z" fill="#dbeafe" />
+                <path d="M238 88h13v30h-13z" fill="#2563eb" opacity=".8" />
+                <path d="M27 120h8v8h-8z" fill="#60a5fa" />
+              </g>
+
+              <g transform="translate(679 126)">
+                <path d="M0 0c-14 0-25 11-25 25 0 18 25 42 25 42s25-24 25-42C25 11 14 0 0 0z" fill="#60a5fa" />
+                <circle cy="25" r="8" fill="#0b1f3a" />
+              </g>
+
+              <g transform="translate(88 269)">
+                <circle r="16" fill="#2563eb" opacity=".25" />
+                <circle r="8" fill="#93c5fd" />
+                <circle r="3" fill="#0b1f3a" />
+              </g>
+            </svg>
+          </div>
+
+          <div className="auth-brand-footnote">
+            <span className="auth-status-dot" />
+            <span>Every route. Every delivery. One clear view.</span>
+          </div>
+        </div>
+      </aside>
+
+      <section className="auth-form-panel">
+        <div className="auth-form-frame">
+          <Outlet />
+        </div>
+        <footer className="auth-copyright">
+          &copy; {new Date().getFullYear()} FleetOps Logistics Systems. All rights reserved.
+        </footer>
+      </section>
+    </main>
+  );
+};
