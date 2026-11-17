@@ -1,0 +1,26 @@
+import api from "./api";
+export const userService = {
+  getAll: async (params) => {
+    const res = await api.get("/users", { params });
+    return res.data.data;
+  },
+  getById: async (id) => {
+    const res = await api.get(`/users/${id}`);
+    return res.data.data;
+  },
+  create: async (data) => {
+    const res = await api.post("/users", data);
+    return res.data.data;
+  },
+  update: async (id, data) => {
+    const res = await api.put(`/users/${id}`, data);
+    return res.data.data;
+  },
+  toggleStatus: async (id, active) => {
+    const res = await api.patch(`/users/${id}/status`, { active });
+    return res.data.data;
+  },
+  delete: async (id) => {
+    await api.delete(`/users/${id}`);
+  }
+};
