@@ -144,6 +144,7 @@ public class ShipmentService {
         shipment.setUpdatedAt(LocalDateTime.now());
         dataStore.saveShipment(shipment);
 
+        syncDeliveryStatus(shipment, newStatus, remarks);
         recordHistory(shipment.getId(), currentStatus, newStatus, remarks, updatedBy);
 
         if (newStatus == ShipmentStatus.DELAYED) {
@@ -165,6 +166,34 @@ public class ShipmentService {
         }
 
         return shipment;
+    }
+
+    private void syncDeliveryStatus(Shipment shipment, ShipmentStatus status, String remarks) {
+        Delivery delivery = dataStore.findDeliveryByShipmentId(shipment.getId()).orElse(null);
+        if (delivery == null) {
+            return;
+        }
+
+        DeliveryStatus deliveryStatus = switch (status) {
+            case IN_TRANSIT -> DeliveryStatus.IN_TRANSIT;
+            case OUT_FOR_DELIVERY -> DeliveryStatus.OUT_FOR_DELIVERY;
+            case DELIVERED -> DeliveryStatus.DELIVERED;
+            case FAILED_DELIVERY -> DeliveryStatus.FAILED;
+            case RETURNED -> DeliveryStatus.RETURNED;
+            default -> null;
+        };
+        if (deliveryStatus == null) {
+            return;
+        }
+
+        delivery.setStatus(deliveryStatus);
+        if (remarks != null) {
+            delivery.setRemarks(remarks);
+        }
+        if (deliveryStatus == DeliveryStatus.DELIVERED) {
+            delivery.setDeliveryDate(LocalDateTime.now());
+        }
+        dataStore.saveDelivery(delivery);
     }
 
     public Shipment assign(String shipmentId, String driverId, String vehicleId, String routeId) {

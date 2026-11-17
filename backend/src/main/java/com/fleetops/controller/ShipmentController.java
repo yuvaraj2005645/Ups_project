@@ -5,10 +5,13 @@ import com.fleetops.model.Shipment;
 import com.fleetops.model.ShipmentHistory;
 import com.fleetops.model.ShipmentPriority;
 import com.fleetops.model.ShipmentStatus;
+import com.fleetops.model.Driver;
 import com.fleetops.service.ShipmentService;
+import com.fleetops.service.DriverService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +25,7 @@ import java.util.List;
 public class ShipmentController {
 
     private final ShipmentService shipmentService;
+    private final DriverService driverService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Shipment>>> getAllShipments(
@@ -29,15 +33,27 @@ public class ShipmentController {
             @RequestParam(required = false) String driverId,
             @RequestParam(required = false) String vehicleId,
             @RequestParam(required = false) String customerId,
-            @RequestParam(required = false) ShipmentPriority priority
+            @RequestParam(required = false) ShipmentPriority priority,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
+        if (isDriver(userDetails)) {
+            String ownDriverId = requireDriver(userDetails).getId();
+            if (driverId != null && !ownDriverId.equalsIgnoreCase(driverId)) {
+                throw new AccessDeniedException("Drivers can only view their own shipments");
+            }
+            driverId = ownDriverId;
+        }
         List<Shipment> shipments = shipmentService.getAll(status, driverId, vehicleId, customerId, priority);
         return ResponseEntity.ok(ApiResponse.ok(shipments));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Shipment>> getShipmentById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Shipment>> getShipmentById(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         Shipment shipment = shipmentService.getById(id);
+        assertDriverOwnsShipment(userDetails, shipment);
         return ResponseEntity.ok(ApiResponse.ok(shipment));
     }
 
@@ -68,13 +84,20 @@ public class ShipmentController {
             @Valid @RequestBody UpdateShipmentStatusRequest request,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
+        Shipment shipment = shipmentService.getById(id);
+        assertDriverOwnsShipment(userDetails, shipment);
         String updatedBy = userDetails != null ? userDetails.getUsername() : "SYSTEM";
         Shipment updated = shipmentService.updateStatus(id, request.getStatus(), request.getRemarks(), updatedBy);
         return ResponseEntity.ok(ApiResponse.ok("Shipment status updated to " + request.getStatus(), updated));
     }
 
     @GetMapping("/{id}/history")
-    public ResponseEntity<ApiResponse<List<ShipmentHistory>>> getShipmentHistory(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<List<ShipmentHistory>>> getShipmentHistory(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Shipment shipment = shipmentService.getById(id);
+        assertDriverOwnsShipment(userDetails, shipment);
         List<ShipmentHistory> history = shipmentService.getHistory(id);
         return ResponseEntity.ok(ApiResponse.ok(history));
     }
@@ -94,5 +117,25 @@ public class ShipmentController {
     public ResponseEntity<ApiResponse<Void>> deleteShipment(@PathVariable String id) {
         shipmentService.delete(id);
         return ResponseEntity.ok(ApiResponse.ok("Shipment deleted successfully", null));
+    }
+
+    private void assertDriverOwnsShipment(UserDetails userDetails, Shipment shipment) {
+        if (isDriver(userDetails)
+                && !requireDriver(userDetails).getId().equalsIgnoreCase(shipment.getDriverId())) {
+            throw new AccessDeniedException("Drivers can only access their own shipments");
+        }
+    }
+
+    private Driver requireDriver(UserDetails userDetails) {
+        Driver driver = driverService.findByEmail(userDetails.getUsername());
+        if (driver == null) {
+            throw new AccessDeniedException("No driver profile is linked to this account");
+        }
+        return driver;
+    }
+
+    private boolean isDriver(UserDetails userDetails) {
+        return userDetails != null && userDetails.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_DRIVER".equals(authority.getAuthority()));
     }
 }

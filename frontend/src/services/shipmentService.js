@@ -35,7 +35,7 @@ export const shipmentService = {
     return res.data.data;
   },
   getByDriverId: async (driverId) => {
-    const res = await api.get(`/shipments/driver/${driverId}`);
+    const res = await api.get(`/drivers/${driverId}/shipments`);
     return res.data.data;
   }
 };

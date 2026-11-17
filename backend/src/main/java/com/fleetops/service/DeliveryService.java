@@ -2,6 +2,7 @@ package com.fleetops.service;
 
 import com.fleetops.dto.CreateDeliveryRequest;
 import com.fleetops.dto.ProofOfDeliveryRequest;
+import com.fleetops.exception.BusinessRuleException;
 import com.fleetops.exception.ResourceNotFoundException;
 import com.fleetops.model.*;
 import com.fleetops.repository.InMemoryDataStore;
@@ -23,8 +24,10 @@ public class DeliveryService {
     private final VehicleService vehicleService;
     private final NotificationService notificationService;
 
-    public List<Delivery> getAll() {
+    public List<Delivery> getAll(String driverId, String shipmentId) {
         return dataStore.findAllDeliveries().stream()
+                .filter(d -> driverId == null || driverId.equals(d.getDriverId()))
+                .filter(d -> shipmentId == null || shipmentId.equals(d.getShipmentId()))
                 .sorted(Comparator.comparing(Delivery::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())))
                 .collect(Collectors.toList());
     }
@@ -81,8 +84,17 @@ public class DeliveryService {
 
     public Delivery submitProof(String deliveryId, ProofOfDeliveryRequest request) {
         Delivery delivery = getById(deliveryId);
+        Shipment shipment = dataStore.findShipmentById(delivery.getShipmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Shipment not found with ID: " + delivery.getShipmentId()));
+
+        if (delivery.getStatus() != DeliveryStatus.OUT_FOR_DELIVERY
+                || shipment.getStatus() != ShipmentStatus.OUT_FOR_DELIVERY) {
+            throw new BusinessRuleException("Proof can only be submitted for an out-for-delivery shipment");
+        }
 
         delivery.setReceiverName(request.getReceiverName());
+        delivery.setReceiverPhone(request.getReceiverPhone());
+        delivery.setReceiverRelationship(request.getReceiverRelationship());
         delivery.setProofPhotoBase64(request.getProofPhotoBase64());
         delivery.setSignatureBase64(request.getSignatureBase64());
         if (request.getRemarks() != null) {
@@ -92,24 +104,22 @@ public class DeliveryService {
         delivery.setDeliveryDate(LocalDateTime.now());
 
         // Update shipment status
-        Shipment shipment = dataStore.findShipmentById(delivery.getShipmentId()).orElse(null);
-        if (shipment != null) {
-            shipmentService.updateStatus(shipment.getId(), ShipmentStatus.DELIVERED, "Delivered to " + request.getReceiverName(), "DRIVER");
+        shipmentService.updateStatus(shipment.getId(), ShipmentStatus.DELIVERED,
+                request.getRemarks() != null ? request.getRemarks() : "Delivered to " + request.getReceiverName(), "DRIVER");
 
-            // Release vehicle load
-            if (delivery.getVehicleId() != null) {
-                vehicleService.releaseShipment(delivery.getVehicleId(), shipment.getWeightKg(), shipment.getVolumeM3());
-            }
+        // Release vehicle load
+        if (delivery.getVehicleId() != null) {
+            vehicleService.releaseShipment(delivery.getVehicleId(), shipment.getWeightKg(), shipment.getVolumeM3());
+        }
 
-            // Release driver assignment & update metrics
-            if (delivery.getDriverId() != null) {
-                driverService.release(delivery.getDriverId(), shipment.getId());
-                Driver driver = dataStore.findDriverById(delivery.getDriverId()).orElse(null);
-                if (driver != null) {
-                    driver.setTotalDeliveries(driver.getTotalDeliveries() + 1);
-                    driver.setSuccessfulDeliveries(driver.getSuccessfulDeliveries() + 1);
-                    dataStore.saveDriver(driver);
-                }
+        // Release driver assignment & update metrics
+        if (delivery.getDriverId() != null) {
+            driverService.release(delivery.getDriverId(), shipment.getId());
+            Driver driver = dataStore.findDriverById(delivery.getDriverId()).orElse(null);
+            if (driver != null) {
+                driver.setTotalDeliveries(driver.getTotalDeliveries() + 1);
+                driver.setSuccessfulDeliveries(driver.getSuccessfulDeliveries() + 1);
+                dataStore.saveDriver(driver);
             }
         }
 

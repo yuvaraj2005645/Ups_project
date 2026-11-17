@@ -1,4 +1,5 @@
 import api from "./api";
+
 export const routeService = {
   getAll: async (params) => {
     const res = await api.get("/routes", { params });
@@ -32,7 +33,7 @@ export const routeService = {
     return res.data.data;
   },
   getByDriverId: async (driverId) => {
-    const res = await api.get(`/routes/driver/${driverId}`);
+    const res = await api.get("/routes", { params: { driverId } });
     return res.data.data;
   }
 };

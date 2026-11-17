@@ -229,11 +229,11 @@ public class SampleDataInitializer {
                 .type(VehicleType.PICKUP_TRUCK)
                 .maxWeightKg(1200.0)
                 .maxVolumeM3(10.0)
-                .currentWeightKg(400.0)
-                .currentVolumeM3(4.0)
+                .currentWeightKg(850.0)
+                .currentVolumeM3(7.5)
                 .fuelType(FuelType.DIESEL)
                 .fuelTankCapacityL(45.0)
-                .status(VehicleStatus.AVAILABLE)
+                .status(VehicleStatus.IN_TRANSIT)
                 .driverId("DR-001")
                 .maintenanceDue("2026-11-20")
                 .lastMaintenance("2026-08-20")
@@ -413,7 +413,7 @@ public class SampleDataInitializer {
                 .licenseNumber("TN-DL-2026-001234")
                 .licenseExpiry(LocalDate.now().plusYears(3))
                 .experienceYears(6)
-                .status(DriverStatus.AVAILABLE)
+                .status(DriverStatus.ON_DELIVERY)
                 .vehicleId("VH-002")
                 .currentShipmentIds(new ArrayList<>(List.of("SH-1002")))
                 .createdAt(LocalDateTime.now().minusDays(180))
@@ -846,10 +846,10 @@ public class SampleDataInitializer {
 
     private void initShipments() {
         // 20 Shipments:
-        // PENDING (3): SH-1001, SH-1002, SH-1003
+        // PENDING (2): SH-1001, SH-1003
         // SCHEDULED (3): SH-1004, SH-1005, SH-1006
         // ASSIGNED (3): SH-1007, SH-1008, SH-1009
-        // IN_TRANSIT (3): SH-1010, SH-1011, SH-1012
+        // IN_TRANSIT (4): SH-1002, SH-1010, SH-1011, SH-1012
         // OUT_FOR_DELIVERY (2): SH-1013, SH-1014
         // DELIVERED (3): SH-1015, SH-1016, SH-1017
         // DELAYED (2): SH-1018, SH-1019
@@ -886,11 +886,13 @@ public class SampleDataInitializer {
                 .packageDescription("Server Network Racks")
                 .weightKg(450.0).volumeM3(3.5).quantity(1)
                 .priority(ShipmentPriority.HIGH)
-                .status(ShipmentStatus.PENDING)
+                .status(ShipmentStatus.IN_TRANSIT)
                 .expectedDeliveryDate(LocalDate.now().plusDays(3))
+                .driverId("DR-001")
+                .vehicleId("VH-002")
                 .warehouseId("WH-001")
                 .createdAt(LocalDateTime.now().minusHours(5))
-                .updatedAt(LocalDateTime.now().minusHours(5))
+                .updatedAt(LocalDateTime.now().minusHours(2))
                 .createdBy("dispatcher@fleetops.com")
                 .notes("Urgent enterprise deployment")
                 .build());
@@ -1292,7 +1294,7 @@ public class SampleDataInitializer {
     }
 
     private void initDeliveries() {
-        // 15 Deliveries
+        // 16 Deliveries
         String[][] delData = {
                 {"DL-001", "SH-1015", "DR-001", "VH-002", "RT-004", "Palani Rd, Dindigul", "Dindigul", "DELIVERED", "M. Venkatesh", "Received with full seal intact"},
                 {"DL-002", "SH-1016", "DR-001", "VH-002", "RT-004", "Thillai Nagar, Trichy", "Trichy", "DELIVERED", "K. Raman", "Signed by manager"},
@@ -1308,7 +1310,8 @@ public class SampleDataInitializer {
                 {"DL-012", "SH-1004", null, null, "RT-006", "102, OMR IT Highway", "Chennai", "SCHEDULED", "Rajesh Patel", "Route planned for tomorrow"},
                 {"DL-013", "SH-1005", null, null, "RT-006", "Velachery Main Rd", "Chennai", "SCHEDULED", "Arun Kumar", "Route planned for tomorrow"},
                 {"DL-014", "SH-1018", null, null, null, "78, 5th Avenue, Indiranagar", "Bangalore", "FAILED", "Sridevi Nair", "Delivery rescheduled due to road block"},
-                {"DL-015", "SH-1019", null, null, null, "19, Junction Main Road", "Salem", "RETURNED", "Mohan Rajan", "Vehicle breakdown, parcel returned to hub"}
+                {"DL-015", "SH-1019", null, null, null, "19, Junction Main Road", "Salem", "RETURNED", "Mohan Rajan", "Vehicle breakdown, parcel returned to hub"},
+                {"DL-016", "SH-1002", "DR-001", "VH-002", null, "45, Electronic City Phase 1", "Bangalore", "IN_TRANSIT", null, "Shipment is in transit to the customer"}
         };
 
         for (String[] d : delData) {
@@ -1325,8 +1328,6 @@ public class SampleDataInitializer {
                     .status(DeliveryStatus.valueOf(d[7]))
                     .receiverName(d[8])
                     .remarks(d[9])
-                    .proofPhotoBase64("DELIVERED".equals(d[7]) ? "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP..." : null)
-                    .signatureBase64("DELIVERED".equals(d[7]) ? "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." : null)
                     .createdAt(LocalDateTime.now().minusDays(3))
                     .failureReason("FAILED".equals(d[7]) || "RETURNED".equals(d[7]) ? d[9] : null)
                     .build();
@@ -1335,10 +1336,13 @@ public class SampleDataInitializer {
     }
 
     private void initShipmentHistory() {
-        // 20 History Records
+        // 23 History Records
         Object[][] historyData = {
                 {"SH-1001", null, ShipmentStatus.PENDING, "Order received from customer", "system", 6},
                 {"SH-1002", null, ShipmentStatus.PENDING, "Order received from enterprise client", "system", 5},
+                {"SH-1002", ShipmentStatus.PENDING, ShipmentStatus.SCHEDULED, "Shipment scheduled on the Bangalore route", "dispatcher@fleetops.com", 4},
+                {"SH-1002", ShipmentStatus.SCHEDULED, ShipmentStatus.ASSIGNED, "Assigned to Ravi Kumar (DR-001) and vehicle VH-002", "dispatcher@fleetops.com", 3},
+                {"SH-1002", ShipmentStatus.ASSIGNED, ShipmentStatus.IN_TRANSIT, "Departed Chennai Central Warehouse", "driver@fleetops.com", 2},
                 {"SH-1003", null, ShipmentStatus.PENDING, "Order booked at hub", "system", 4},
                 {"SH-1004", null, ShipmentStatus.PENDING, "Shipment placed", "system", 18},
                 {"SH-1004", ShipmentStatus.PENDING, ShipmentStatus.SCHEDULED, "Scheduled on Route RT-006", "dispatcher@fleetops.com", 10},

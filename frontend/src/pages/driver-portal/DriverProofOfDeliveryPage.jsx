@@ -102,14 +102,14 @@ export const DriverProofOfDeliveryPage = () => {
     const signatureUrl = canvas ? canvas.toDataURL("image/png") : "";
     setIsSubmitting(true);
     try {
-      await deliveryService.submitProofOfDelivery(id, {
+      await deliveryService.submitProof(id, {
         receiverName: recipientName,
-        signatureUrl,
-        notes: deliveryNotes,
-        photoUrl: photoPreview || void 0
+        signatureBase64: signatureUrl,
+        proofPhotoBase64: photoPreview || undefined,
+        remarks: deliveryNotes || undefined,
       });
       success("Delivery Confirmed!", "Proof of delivery successfully recorded.");
-      navigate("/driver/deliveries");
+      navigate("/driver/history");
     } catch (err) {
       console.error(err);
       error("Submission Failed", err.response?.data?.message || "Could not verify delivery.");

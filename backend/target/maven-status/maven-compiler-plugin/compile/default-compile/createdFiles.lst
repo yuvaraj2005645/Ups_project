@@ -14,7 +14,9 @@ com\fleetops\dto\CreateCustomerRequest$CreateCustomerRequestBuilder.class
 com\fleetops\dto\CreateDriverRequest$CreateDriverRequestBuilder.class
 com\fleetops\dto\VehicleReportResponse$VehicleReportResponseBuilder.class
 com\fleetops\dto\ConfirmAllocationRequest.class
+com\fleetops\dto\UpdateMyProfileRequest$UpdateMyProfileRequestBuilder.class
 com\fleetops\dto\CreateUserRequest$CreateUserRequestBuilder.class
+com\fleetops\dto\UpdateMyProfileRequest.class
 com\fleetops\model\RouteStop$RouteStopBuilder.class
 com\fleetops\config\CorsConfig.class
 com\fleetops\dto\ShipmentReportResponse.class

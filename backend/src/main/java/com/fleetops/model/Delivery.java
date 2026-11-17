@@ -24,6 +24,8 @@ public class Delivery {
     private LocalDateTime deliveryDate;
     private DeliveryStatus status; // SCHEDULED, IN_TRANSIT, OUT_FOR_DELIVERY, DELIVERED, FAILED, RETURNED
     private String receiverName;
+    private String receiverPhone;
+    private String receiverRelationship;
     private String remarks;
     private String proofPhotoBase64;
     private String signatureBase64;

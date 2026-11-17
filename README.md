@@ -1,15 +1,15 @@
-# FleetOps – Intelligent Logistics Management System
+# FleetOps - Delivery Route and Vehicle Capacity Management
 
-> ⚠️ **DEMO APPLICATION**: This application uses in-memory data storage. All data resets when the backend is restarted. No database is required or used. JWT tokens are for demonstration purposes only and should not be used in production.
+> **Demo application:** FleetOps stores application data in memory. All runtime data resets when the backend restarts. The included sample accounts and JWT configuration are for local demonstration only; configure production-grade persistence, secrets, email delivery, and deployment security before using this application in a real environment.
 
 ---
 
 ## Overview
 
-FleetOps is a full-stack enterprise logistics management platform that centralizes delivery route optimization, vehicle capacity management, driver coordination, and real-time shipment tracking.
+FleetOps is a full-stack logistics management demo for coordinating shipments, delivery routes, vehicles, drivers, warehouses, and customers. It includes an administrator/dispatcher workspace and a driver portal backed by a Spring Boot REST API.
 
 **Core Capabilities:**
-- 🗺️ **Intelligent Route Optimization** – Nearest-Neighbor Heuristic + Haversine distance algorithm that calculates the optimal stop sequence, compares it with the original route, and reports distance/time savings.
+- 🗺️ **Route Optimization** – A nearest-neighbor heuristic using Haversine distances reorders stops and compares estimated distance with the input order.
 - 🚛 **Vehicle Capacity Management** – Real-time weight and volume constraint enforcement. Automatically recommends vehicles ranked by fit score. Prevents capacity violations.
 - 📦 **End-to-End Shipment Lifecycle** – From creation to proof-of-delivery with status history tracking.
 - 👨‍✈️ **Driver Portal** – Dedicated interface for drivers to view assignments, navigate routes, update delivery status, and submit digital proof of delivery.
@@ -37,15 +37,15 @@ FleetOps is a full-stack enterprise logistics management platform that centraliz
 ### Backend
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| Java | 25 (LTS) | Runtime |
+| Java | 25 | Runtime and compiler target |
 | Spring Boot | 3.5.16 | Application framework |
 | Spring Security | 6 | Authentication & authorization |
 | JJWT | 0.12.3 | JWT token generation/validation |
 | Lombok | 1.18.46 | Boilerplate reduction |
-| Maven | 3.9.9 | Build tool |
+| Maven | 3.9+ | Build tool |
 | Java Collections | – | In-memory data store (ConcurrentHashMap, CopyOnWriteArrayList) |
 
-> **No database.** No JPA, Hibernate, H2, or any database dependency is used.
+> **No database is configured.** The application uses an in-memory repository; there are no JPA, Hibernate, H2, or other database dependencies.
 
 ---
 
@@ -72,7 +72,7 @@ FleetOps is a full-stack enterprise logistics management platform that centraliz
 - ✅ View only own assigned shipments
 - ✅ Interactive route map with GPS location
 - ✅ Delivery status updates (enforced valid transitions)
-- ✅ Digital proof of delivery (signature canvas + photo)
+- ✅ Digital proof of delivery (recipient details and signature canvas)
 - ✅ Delivery history and performance stats
 
 ### Security
@@ -89,31 +89,31 @@ FleetOps is a full-stack enterprise logistics management platform that centraliz
 ```
 Delivery Route and Vehicle Capacity Management/
 ├── backend/                          # Spring Boot application
-│   ├── pom.xml
+│   ├── pom.xml                      # Java 25, Spring Boot 3.5.16
 │   └── src/main/java/com/fleetops/
 │       ├── FleetOpsApplication.java
-│       ├── config/                   # CorsConfig
-│       ├── security/                 # JwtUtil, JwtAuthFilter, SecurityConfig, UserDetailsServiceImpl
-│       ├── controller/               # 12 REST controllers
-│       ├── service/                  # 12 service classes
-│       ├── repository/               # InMemoryDataStore.java
-│       ├── model/                    # 10 entity classes + 14 enums
-│       ├── dto/                      # Request/Response DTOs
-│       ├── exception/                # GlobalExceptionHandler
-│       └── initializer/              # SampleDataInitializer.java
+│       ├── config/                   # CORS configuration
+│       ├── security/                 # Stateless JWT security
+│       ├── controller/               # REST API endpoints
+│       ├── service/                  # Business rules and workflows
+│       ├── repository/               # Thread-safe in-memory data store
+│       ├── model/                    # Domain models and enums
+│       ├── dto/                      # Validated API request/response types
+│       ├── exception/                # Domain exceptions and API error handling
+│       └── initializer/              # Startup demo-data seeding
 │
 ├── frontend/                         # Vite React application
-│   ├── package.json
+│   ├── package.json                  # npm scripts and dependencies
 │   ├── vite.config.ts
 │   ├── tailwind.config.js
 │   └── src/
-│       ├── types/index.ts            # All TypeScript interfaces
-│       ├── services/                 # 12 API service modules
-│       ├── contexts/AuthContext.tsx  # JWT auth state
-│       ├── hooks/                    # useNotifications, useAuth
-│       ├── components/               # 20+ shared components
-│       ├── layouts/                  # AdminLayout, DriverLayout, AuthLayout
-│       └── pages/                    # 35+ page components
+│       ├── types/                    # Shared TypeScript domain types
+│       ├── services/                 # Axios client and API modules
+│       ├── contexts/                 # Authentication state
+│       ├── hooks/                    # Reusable UI hooks
+│       ├── components/               # Shared UI components
+│       ├── layouts/                  # Admin, driver, and auth layouts
+│       └── pages/                    # Feature screens
 │
 └── README.md
 ```
@@ -122,14 +122,10 @@ Delivery Route and Vehicle Capacity Management/
 
 ## Prerequisites
 
-- **Java 25 (LTS)** (JDK) – [Download](https://www.oracle.com/java/technologies/downloads/)
-- **Maven 3.9+** – [Download](https://maven.apache.org/download.cgi) OR use the cached wrapper
-- **Node.js 18+** – [Download](https://nodejs.org/)
+- **JDK 25** – [Download](https://www.oracle.com/java/technologies/downloads/)
+- **Maven 3.9+** – [Download](https://maven.apache.org/download.cgi)
+- **Node.js 18+** – [Download](https://nodejs.org/) (npm is included)
 - **npm 9+** – Included with Node.js
-
-> On this machine, Maven 3.9.9 is cached at:  
-> `C:\Users\hp\.m2\wrapper\dists\apache-maven-3.9.9\977a63e90f436cd6ade95b4c0e10c20c\bin\mvn.cmd`  
-> Java 25 is installed at: `C:\Users\hp\AppData\Local\Programs\Java\jdk-25`
 
 ---
 
@@ -138,15 +134,8 @@ Delivery Route and Vehicle Capacity Management/
 ### Backend
 
 ```powershell
-# Set JAVA_HOME if not already set
-$env:JAVA_HOME = "$env:LOCALAPPDATA\Programs\Java\jdk-25"
-
-# Navigate to backend
-cd "e:\Delivery Route and Vechicle Capacity Management\backend"
-
-# Run with Maven (replace path with your mvn location)
-$MVN = "C:\Users\hp\.m2\wrapper\dists\apache-maven-3.9.9\977a63e90f436cd6ade95b4c0e10c20c\bin\mvn.cmd"
-& $MVN spring-boot:run
+cd backend
+mvn spring-boot:run
 ```
 
 Backend URL: **http://localhost:8080**  
@@ -161,19 +150,43 @@ API Base URL: **http://localhost:8080/api**
 ### Frontend
 
 ```powershell
-# Navigate to frontend
-cd "e:\Delivery Route and Vechicle Capacity Management\frontend"
-
-# Install dependencies (first time only)
-npm install
-
-# Start development server
+cd frontend
+npm ci
 npm run dev
 ```
 
 Frontend URL: **http://localhost:5173**
 
 > Both servers must be running simultaneously for the application to function.
+> On Windows, run each server in a separate PowerShell terminal. If Java 25 is not the active JDK, set `JAVA_HOME` to your JDK 25 installation before running Maven.
+
+### Build and package
+
+```powershell
+# Frontend: TypeScript check and production bundle
+cd frontend
+npm run build
+
+# Backend: compile, run tests (if present), and package an executable JAR
+cd ..\backend
+mvn clean package
+java -jar target\fleetops-backend-0.0.1-SNAPSHOT.jar
+```
+
+The frontend production bundle is written to `frontend/dist`. `npm run preview` serves that bundle locally after a build.
+
+### Configuration
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Backend port | `8080` | Spring Boot HTTP port (`SERVER_PORT` can override it). |
+| Frontend dev port | `5173` | Vite development server port, set in `frontend/vite.config.ts`. |
+| Frontend API URL | `http://localhost:8080/api` | Axios base URL. Override with `VITE_API_URL` (for example, in `frontend/.env.local`). |
+| JWT expiration | `86400000` ms (24 hours) | Override with the Spring property `fleetops.jwt.expiration`. |
+| JWT signing secret | Demo default in backend configuration | Supply a private, suitably strong Base64-encoded key using the Spring property `fleetops.jwt.secret` in any non-demo deployment. |
+| Allowed browser origin | `http://localhost:5173` | Configured in `backend/src/main/java/com/fleetops/config/CorsConfig.java`; update it when serving the UI from another origin. |
+
+Spring properties can be supplied through standard Spring Boot configuration, including environment variables (for example, `SERVER_PORT`, `FLEETOPS_JWT_SECRET`, and `FLEETOPS_JWT_EXPIRATION`). Never commit production secrets. The browser map uses OpenStreetMap tiles and needs network access to load them.
 
 ---
 
@@ -199,8 +212,8 @@ Loaded automatically on backend startup:
 | Vehicles | 10 | Tamil Nadu registration numbers (TN01-TN10) |
 | Drivers | 10 | With license numbers, ratings, experience |
 | Routes | 10 | Between South Indian cities with real coordinates |
-| Shipments | 20 | All lifecycle statuses (SH-1001 to SH-1020) |
-| Deliveries | 15 | Linked to in-transit / completed shipments |
+| Shipments | 20 | Sampled across pending, scheduled, assigned, in-transit, out-for-delivery, delivered, delayed, and cancelled states (SH-1001 to SH-1020) |
+| Deliveries | 16 | Includes the demo driver's active in-transit delivery |
 | Notifications | 10 | Various types |
 | Shipment History | 20 | Status transition audit log |
 
@@ -216,6 +229,8 @@ Loaded automatically on backend startup:
 
 ## API Endpoint Reference
 
+The API is rooted at `http://localhost:8080/api`. Except for the authentication endpoints, API requests require a valid JWT in the `Authorization: Bearer <token>` header. Responses are wrapped in the backend's `ApiResponse` type. Query and JSON body fields are validated by the request DTOs; see `backend/src/main/java/com/fleetops/dto/` for their exact schemas.
+
 ### Authentication
 ```
 POST   /api/auth/login
@@ -223,6 +238,8 @@ POST   /api/auth/forgot-password
 POST   /api/auth/reset-password
 GET    /api/auth/me
 ```
+
+`POST /api/auth/login` returns the token and user details. The forgot/reset-password endpoints operate on the in-memory demo user; password reset does not send an email.
 
 ### Dashboard
 ```
@@ -241,6 +258,8 @@ GET    /api/shipments/{id}/history
 POST   /api/shipments/{id}/assign
 ```
 
+`GET /api/shipments` supports optional `status`, `driverId`, `vehicleId`, `customerId`, and `priority` query parameters.
+
 ### Vehicles
 ```
 GET    /api/vehicles
@@ -251,6 +270,7 @@ GET    /api/vehicles/{id}/capacity
 GET    /api/vehicles/available
 POST   /api/vehicles/allocate
 POST   /api/vehicles/confirm-allocation
+DELETE /api/vehicles/{id}
 ```
 
 ### Drivers
@@ -272,6 +292,7 @@ POST   /api/routes
 PUT    /api/routes/{id}
 POST   /api/routes/optimize
 POST   /api/routes/assign
+DELETE /api/routes/{id}
 ```
 
 ### Customers
@@ -289,6 +310,7 @@ GET    /api/warehouses
 GET    /api/warehouses/{id}
 POST   /api/warehouses
 PUT    /api/warehouses/{id}
+DELETE /api/warehouses/{id}
 ```
 
 ### Deliveries
@@ -298,6 +320,7 @@ GET    /api/deliveries/{id}
 POST   /api/deliveries
 PATCH  /api/deliveries/{id}/status
 POST   /api/deliveries/{id}/proof
+DELETE /api/deliveries/{id}
 ```
 
 ### Reports
@@ -312,10 +335,15 @@ GET    /api/reports/deliveries
 ### Users
 ```
 GET    /api/users
+GET    /api/users/{id}
 POST   /api/users
 PUT    /api/users/{id}
 PATCH  /api/users/{id}/role
+PATCH  /api/users/{id}/activate
+PATCH  /api/users/{id}/deactivate
 ```
+
+Most API routes require authentication; user-management operations and selected create/update/delete operations also enforce role checks. The frontend separates administrator/dispatcher screens from the driver portal. The exact role annotations are defined on the corresponding controller methods.
 
 ### Notifications
 ```
@@ -331,7 +359,7 @@ PATCH  /api/notifications/mark-all-read
 The system implements a **Nearest-Neighbor Heuristic** with **Haversine distance calculations**:
 
 ```
-1. Start at warehouse (origin) coordinates
+1. Start at warehouse (origin) coordinates when a valid warehouse is supplied; otherwise use the first stop as origin
 2. Mark all delivery stops as unvisited
 3. While unvisited stops remain:
    a. Find the nearest unvisited stop using Haversine formula
@@ -339,10 +367,10 @@ The system implements a **Nearest-Neighbor Heuristic** with **Haversine distance
    c. Mark as visited, move to this stop as current position
 4. Return optimized stop order
 5. Calculate:
-   - Original distance = sum of distances in original input order
-   - Optimized distance = sum of distances in optimized order
+   - Original distance = origin-to-first-stop plus legs in the original input order
+   - Optimized distance = origin-to-first-stop plus legs in the optimized order
    - Savings = original - optimized
-   - Time saved = savings / 60 km/h average speed
+   - Estimated time saved = savings / 40 km/h average speed
 ```
 
 **Haversine Formula** accounts for Earth's curvature:
@@ -354,17 +382,17 @@ a = sin²(dLat/2) + cos(lat1)·cos(lat2)·sin²(dLon/2)
 distance = 2R·atan2(√a, √(1−a))
 ```
 
-> **Note**: Distances are point-to-point geodesic (great-circle) estimates, not actual road distances. They are clearly labelled as estimated distances.
+> **Note**: Distances are point-to-point geodesic (great-circle) estimates, not road distances or turn-by-turn directions. The nearest-neighbor heuristic is a practical ordering heuristic, not a guarantee of a globally shortest route. Route creation estimates duration at 45 km/h; the optimization response estimates time savings at 40 km/h.
 
 ---
 
 ## Vehicle Capacity & Allocation Algorithm
 
-**Validation Rules:**
+**Allocation behavior:**
 - Never allow `currentWeight + newShipmentWeight > maxWeight`
 - Never allow `currentVolume + newShipmentVolume > maxVolume`
-- Reject UNDER_MAINTENANCE and INACTIVE vehicles
-- Prevent double-assignment of same vehicle to conflicting active trips
+- Exclude UNDER_MAINTENANCE and INACTIVE vehicles from recommendations
+- Optionally filter recommendations by vehicle type
 
 **Recommendation Scoring:**
 ```
@@ -377,8 +405,10 @@ Labels:
   score > 60% → "Good Fit"
   score ≤ 60% → "Optimal"
 
-Sort: Higher score first (best-fit packing = less waste)
+Sort: Higher score first (best-fit packing = less unused capacity)
 ```
+
+Recommendations are estimates; confirming an allocation applies the shipment's weight and volume to the selected vehicle's in-memory totals.
 
 ---
 
@@ -391,14 +421,13 @@ Sort: Higher score first (best-fit packing = less waste)
 | **Data Reset** | All data is lost when the backend restarts |
 | **No Persistence** | No database, no file storage |
 | **Single Instance** | Not suitable for load-balanced deployment |
-| **File Uploads** | Proof-of-delivery photos stored as base64 strings in memory |
 | **Signatures** | Stored as base64 PNG strings in memory |
 | **Email Simulation** | Forgot-password does not send real emails |
 | **GPS** | Route navigation uses browser Geolocation API (may require HTTPS in production) |
 
 ---
 
-## Tested Workflows
+## Typical Workflows
 
 | Workflow | Steps |
 |---------|-------|
@@ -419,6 +448,20 @@ Sort: Higher score first (best-fit packing = less waste)
 - **Status Machines**: Shipment and delivery status transitions are enforced server-side.
 - **JWT**: Tokens expire after 24 hours. Role is embedded in token claims.
 - **CORS**: Configured to allow `http://localhost:5173` on all endpoints.
+
+### Domain status values
+
+| Domain | Values |
+|--------|--------|
+| Shipment | `PENDING`, `SCHEDULED`, `ASSIGNED`, `IN_TRANSIT`, `OUT_FOR_DELIVERY`, `DELIVERED`, `DELAYED`, `CANCELLED`, `FAILED_DELIVERY`, `RETURNED` |
+| Delivery | `SCHEDULED`, `IN_TRANSIT`, `OUT_FOR_DELIVERY`, `DELIVERED`, `FAILED`, `RETURNED` |
+| Vehicle | `AVAILABLE`, `ASSIGNED`, `IN_TRANSIT`, `UNDER_MAINTENANCE`, `INACTIVE` |
+| Driver | `AVAILABLE`, `ASSIGNED`, `ON_DELIVERY`, `ON_LEAVE`, `INACTIVE` |
+| Route | `PLANNED`, `ACTIVE`, `COMPLETED`, `CANCELLED` |
+| Route stop | `PENDING`, `ARRIVED`, `COMPLETED`, `SKIPPED` |
+| Warehouse | `ACTIVE`, `INACTIVE`, `MAINTENANCE` |
+
+Shipment status changes are validated on the backend. The normal progression is `PENDING → SCHEDULED → ASSIGNED → IN_TRANSIT → OUT_FOR_DELIVERY → DELIVERED`; supported exception paths include delayed, failed-delivery, cancelled, and returned states. See `ShipmentService` for the allowed transitions.
 
 ---
 

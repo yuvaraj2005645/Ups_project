@@ -2,6 +2,7 @@ package com.fleetops.service;
 
 import com.fleetops.dto.CreateDriverRequest;
 import com.fleetops.dto.UpdateDriverRequest;
+import com.fleetops.dto.UpdateMyProfileRequest;
 import com.fleetops.exception.ResourceNotFoundException;
 import com.fleetops.model.Driver;
 import com.fleetops.model.DriverStatus;
@@ -113,7 +114,35 @@ public class DriverService {
 
     public List<Shipment> getDriverShipments(String driverId) {
         return dataStore.findAllShipments().stream()
-                .filter(s -> driverId.equals(s.getDriverId()))
+                .filter(s -> driverId != null && driverId.equalsIgnoreCase(s.getDriverId()))
                 .collect(Collectors.toList());
+    }
+
+    public Driver findByUserId(String userId) {
+        return dataStore.findAllDrivers().stream()
+                .filter(d -> userId != null && userId.equals(d.getUserId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Driver findByEmail(String email) {
+        return dataStore.findAllDrivers().stream()
+                .filter(d -> email != null && email.equalsIgnoreCase(d.getEmail()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Driver updateMyProfile(String driverId, UpdateMyProfileRequest request) {
+        Driver driver = getById(driverId);
+        if (request.getPhone() != null && !request.getPhone().isBlank()) {
+            driver.setPhone(request.getPhone());
+        }
+        if (request.getAddress() != null && !request.getAddress().isBlank()) {
+            driver.setAddress(request.getAddress());
+        }
+        if (request.getCity() != null && !request.getCity().isBlank()) {
+            driver.setCity(request.getCity());
+        }
+        return dataStore.saveDriver(driver);
     }
 }

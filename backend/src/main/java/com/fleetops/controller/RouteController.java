@@ -19,8 +19,10 @@ public class RouteController {
     private final RouteService routeService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Route>>> getAllRoutes() {
-        List<Route> routes = routeService.getAll();
+    public ResponseEntity<ApiResponse<List<Route>>> getAllRoutes(
+            @RequestParam(required = false) String driverId
+    ) {
+        List<Route> routes = routeService.getAll(driverId);
         return ResponseEntity.ok(ApiResponse.ok(routes));
     }
 

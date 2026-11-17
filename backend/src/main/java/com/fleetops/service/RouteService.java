@@ -21,8 +21,10 @@ public class RouteService {
     private final DriverService driverService;
     private final VehicleService vehicleService;
 
-    public List<Route> getAll() {
-        return dataStore.findAllRoutes();
+    public List<Route> getAll(String driverId) {
+        return dataStore.findAllRoutes().stream()
+                .filter(r -> driverId == null || driverId.equals(r.getDriverId()))
+                .collect(java.util.stream.Collectors.toList());
     }
 
     public Route getById(String id) {

@@ -44,6 +44,12 @@ import { DriverDashboard } from "./pages/driver-portal/DriverDashboard";
 import { DriverDeliveriesPage } from "./pages/driver-portal/DriverDeliveriesPage";
 import { DriverProofOfDeliveryPage } from "./pages/driver-portal/DriverProofOfDeliveryPage";
 import { DriverProfilePage } from "./pages/driver-portal/DriverProfilePage";
+import { MyShipments } from "./pages/driver-portal/MyShipments";
+import { MyRoute } from "./pages/driver-portal/MyRoute";
+import { RouteNavigation } from "./pages/driver-portal/RouteNavigation";
+import { UpdateStatus } from "./pages/driver-portal/UpdateStatus";
+import { ProofOfDelivery } from "./pages/driver-portal/ProofOfDelivery";
+import { DeliveryHistory } from "./pages/driver-portal/DeliveryHistory";
 const RootRedirect = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
   if (isLoading) return null;
@@ -96,7 +102,7 @@ export const App = () => {
   }<Route
     path="/driver"
     element={<PrivateRoute allowedRoles={["DRIVER", "ADMIN"]}><DriverLayout /></PrivateRoute>}
-  ><Route path="dashboard" element={<DriverDashboard />} /><Route path="deliveries" element={<DriverDeliveriesPage />} /><Route path="pod/:id" element={<DriverProofOfDeliveryPage />} /><Route path="profile" element={<DriverProfilePage />} /></Route>{
+  ><Route path="dashboard" element={<DriverDashboard />} /><Route path="shipments" element={<MyShipments />} /><Route path="route" element={<MyRoute />} /><Route path="navigate" element={<RouteNavigation />} /><Route path="update-status" element={<UpdateStatus />} /><Route path="pod" element={<ProofOfDelivery />} /><Route path="pod/:id" element={<DriverProofOfDeliveryPage />} /><Route path="history" element={<DeliveryHistory />} /><Route path="deliveries" element={<DriverDeliveriesPage />} /><Route path="profile" element={<DriverProfilePage />} /></Route>{
     /* Catch-all Fallback */
   }<Route path="*" element={<Navigate to="/" replace />} /></Routes></AuthProvider></ToastProvider></BrowserRouter>;
 };
