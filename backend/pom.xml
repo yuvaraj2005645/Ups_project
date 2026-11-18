@@ -18,7 +18,7 @@
     <description>FleetOps Logistics and Vehicle Capacity Management System</description>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>25</java.version>
         <jjwt.version>0.12.3</jjwt.version>
     </properties>
 

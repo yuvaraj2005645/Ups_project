@@ -290,6 +290,10 @@ export const ProofOfDelivery = () => {
       error("Recipient required", "Enter the recipient's name before submitting.");
       return;
     }
+    if (recipientPhone.trim() && !/^\+?[0-9\s()\-]{7,20}$/.test(recipientPhone.trim())) {
+      error("Invalid phone number", "Enter a valid recipient phone number.");
+      return;
+    }
     if (!hasSignature || !canvasRef.current) {
       error("Signature required", "Capture the recipient's signature before submitting.");
       return;
@@ -494,7 +498,7 @@ export const ProofOfDelivery = () => {
                     <input required maxLength={120} value={recipientName} onChange={(event) => setRecipientName(event.target.value)} placeholder="Recipient's full name" className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                   </Field>
                   <Field label="Recipient Phone Number">
-                    <input type="tel" maxLength={32} pattern="[+]?[0-9\\s()-]{7,20}" title="Enter a valid phone number" value={recipientPhone} onChange={(event) => setRecipientPhone(event.target.value)} placeholder="+91 9876543210" className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                    <input type="tel" maxLength={32} value={recipientPhone} onChange={(event) => setRecipientPhone(event.target.value)} placeholder="+91 9876543210" className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                   </Field>
                   <Field label="Relationship to Customer">
                     <select value={relationship} onChange={(event) => setRelationship(event.target.value)} className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20">

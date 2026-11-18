@@ -3,6 +3,22 @@
 @tailwind utilities;
 
 @layer base {
+  /* ─── Global layout reset ─────────────────────────────────────────────
+     Prevent html / body / #root from ever becoming scroll containers.
+     The FleetOps app layout (AdminLayout / DriverLayout) owns all scroll
+     behaviour internally: only the main content area scrolls.
+  ────────────────────────────────────────────────────────────────────── */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;         /* block document-level scrolling */
+  }
+
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
     font-family: 'Inter', sans-serif;
     color: #1E293B;
