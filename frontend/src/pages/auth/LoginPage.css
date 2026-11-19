@@ -1,0 +1,890 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   FleetOps Login Page — Professional UI Refinement
+   Strategy: Pure CSS upgrade of proportions, typography & spacing.
+             JSX is untouched. All changes are in this file only.
+   Breakpoints:
+     ≥1024px  → split-screen desktop (all heights & font sizes scaled up)
+     800px H  → compact desktop (reduces to fit shorter viewports cleanly)
+     720px H  → very short viewports (further compact, still no scroll)
+     <1024px  → single-column tablet / mobile (right panel only)
+     <520px   → small mobile
+═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Root container ──────────────────────────────────────────────────── */
+.login-page {
+  display: grid;
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* 46 / 54 split — left panel gets a little more room for the visual */
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  overflow: hidden;
+}
+
+.login-page .login-left-panel,
+.login-page .login-right-panel {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ── LEFT PANEL ──────────────────────────────────────────────────────── */
+
+/* Outer content shell — fluid vertical padding */
+.login-page .login-left-content {
+  width: 100%;
+  min-height: 0;
+  padding: clamp(18px, 2.6vh, 32px) clamp(28px, 3.2vw, 56px);
+}
+
+/* Brand lockup */
+.login-page .login-brand-lockup {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+/* Logo box — slightly larger */
+.login-page .login-brand-lockup > div:first-child {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 14px !important;
+  font-size: 1.15rem !important;
+}
+
+/* "FleetOps" wordmark */
+.login-page .login-brand-lockup .text-xl {
+  font-size: 22px !important;
+  letter-spacing: -0.02em;
+}
+
+/* "Enterprise Logistics" sub-label */
+.login-page .login-brand-lockup .text-xs {
+  font-size: 11px !important;
+  letter-spacing: 0.14em;
+}
+
+/* Flex column holding headline → illustration → stats */
+.login-page .login-brand-main {
+  flex: 1 1 0%;
+  min-height: 0;
+  gap: clamp(12px, 2vh, 22px);
+  padding-block: clamp(10px, 1.6vh, 20px);
+}
+
+/* Eyebrow label */
+.login-page .login-eyebrow {
+  margin-bottom: 10px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+
+/* Main headline — the most visible element on the left panel */
+.login-page .login-brand-main h1 {
+  margin-bottom: 10px;
+  font-size: clamp(1.65rem, 2.6vw, 2.4rem);  /* 26px → 38px */
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+
+/* Role description paragraph */
+.login-page .login-description {
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.65;
+  opacity: 0.75;
+}
+
+/* ── Illustration ─────────────────────────────────────────────────────── */
+.login-page .login-illustration {
+  display: flex;
+  min-height: 0;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG grows 25% larger than before — was capped at 205px, now 260px */
+.login-page .login-illustration svg {
+  display: block;
+  width: 100%;
+  /* clamp: min 140px · preferred 27vh · max 260px */
+  max-height: clamp(140px, 27vh, 260px);
+}
+
+/* ── Statistics cards ─────────────────────────────────────────────────── */
+.login-page .login-stats {
+  flex: 0 0 auto;
+  gap: clamp(8px, 1.1vh, 12px);
+}
+
+.login-page .login-stat-card {
+  min-height: 72px;         /* was 58px — +24% taller */
+  padding: 11px 13px;       /* was 8px 10px */
+  gap: 11px;                /* was 9px */
+  border-radius: 14px;
+}
+
+/* Icon container inside each stat card */
+.login-page .login-stat-card > div:first-child {
+  width: 34px !important;   /* was 28px */
+  height: 34px !important;
+  border-radius: 10px !important;
+  flex-shrink: 0;
+}
+
+/* Icon itself */
+.login-page .login-stat-card > div:first-child svg {
+  width: 17px !important;   /* was 14px */
+  height: 17px !important;
+}
+
+/* Stat label text */
+.login-page .login-stat-card .text-xs:first-child {
+  font-size: 12px !important;  /* was 11px */
+}
+
+/* Stat value number */
+.login-page .login-stat-card .text-sm {
+  font-size: 20px !important;  /* was 14px — now prominent */
+  font-weight: 800 !important;
+  line-height: 1.1;
+}
+
+/* Trend text */
+.login-page .login-stat-card .text-xs:last-child {
+  font-size: 11px !important;
+}
+
+/* Footer footnote */
+.login-page .login-brand-footer {
+  flex: 0 0 auto;
+  margin-top: 10px;
+}
+
+.login-page .login-brand-footer span:last-child {
+  font-size: 12px;
+}
+
+/* ── RIGHT PANEL ─────────────────────────────────────────────────────── */
+.login-page .login-right-panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.login-page .login-right-content {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Generous side padding, modest vertical — avoids overflow */
+  padding: clamp(12px, 1.8vh, 22px) clamp(20px, 3.5vw, 48px);
+}
+
+.login-page .login-content {
+  flex: 0 0 auto;
+  margin: auto;
+  width: 100%;
+  max-width: 480px;   /* slightly wider than 460px for more breathing room */
+}
+
+/* Mobile brand row */
+.login-page .login-mobile-brand {
+  margin-bottom: 18px;
+}
+
+/* ── Role selector ───────────────────────────────────────────────────── */
+.login-page .login-role-selector {
+  margin-bottom: 16px;
+}
+
+.login-page .login-role-selector > p {
+  margin-bottom: 10px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+/* Individual role card */
+.login-page .login-role-card {
+  min-height: 88px;      /* was 72px — +22% taller */
+  gap: 5px;
+  padding: 10px 6px;
+  border-radius: 16px;
+}
+
+/* Icon circle in role card */
+.login-page .login-role-card > div:first-of-type {
+  width: 38px !important;   /* was 30px */
+  height: 38px !important;
+  border-radius: 12px !important;
+}
+
+/* Icon inside role card */
+.login-page .login-role-card > div:first-of-type svg {
+  width: 20px !important;   /* was ~18px */
+  height: 20px !important;
+}
+
+/* Role name label */
+.login-page .login-role-card span:nth-of-type(1) {
+  font-size: 13.5px;    /* was 11-12px */
+  font-weight: 700;
+}
+
+/* Role tagline */
+.login-page .login-role-card span:nth-of-type(2) {
+  font-size: 10px;      /* was 9px */
+}
+
+/* Active-dot indicator */
+.login-page .login-role-card .absolute {
+  width: 8px;
+  height: 8px;
+}
+
+/* ── Login card ──────────────────────────────────────────────────────── */
+.login-page .login-card-body {
+  padding: clamp(18px, 2.2vh, 26px) clamp(20px, 2.4vw, 28px);
+}
+
+/* Welcome heading */
+.login-page .login-welcome {
+  margin-bottom: 14px;
+}
+
+.login-page .login-welcome h2 {
+  font-size: clamp(19px, 1.6vw, 23px);   /* was 19px flat */
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.login-page .login-welcome p {
+  font-size: 13px;    /* was 12px */
+  line-height: 1.5;
+  margin-top: 3px;
+}
+
+/* Error banner */
+.login-page .login-error {
+  margin-bottom: 12px;
+  padding: 11px 13px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+/* Form field gap */
+.login-page .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;      /* was 9px */
+}
+
+/* Field labels */
+.login-page .login-field-label {
+  margin-bottom: 6px;    /* was 4px */
+  font-size: 11px;       /* was 10px */
+  letter-spacing: 0.08em;
+}
+
+/* Input fields — taller and larger text */
+.login-page .login-input {
+  min-height: 48px;      /* was 42px */
+  font-size: 14px;       /* was 13px (sm) */
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 12px;
+}
+
+/* Input icons */
+.login-page .login-input + svg,
+.login-page .login-input ~ svg,
+.login-page .relative > svg.absolute {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+/* Remember me row */
+.login-page .login-remember {
+  gap: 10px;
+  font-size: 13px;    /* was 12px */
+}
+
+/* Checkbox box */
+.login-page .login-remember > div > div {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Submit / Sign-In button */
+.login-page .login-submit {
+  min-height: 50px;      /* was 44px */
+  margin-top: 2px;
+  font-size: 15px;       /* was 14px (sm) */
+  letter-spacing: 0.01em;
+  border-radius: 13px;
+}
+
+/* Arrow icon in submit button */
+.login-page .login-submit svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+/* Spinner in submit button */
+.login-page .login-submit svg.animate-spin {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Forgot password link */
+.login-page .login-form a {
+  font-size: 12px;
+}
+
+/* ── Demo credentials ────────────────────────────────────────────────── */
+.login-page .login-demo-section {
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.login-page .login-demo-heading {
+  margin-bottom: 10px;
+}
+
+.login-page .login-demo-heading span.text-xs {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.login-page .login-demo-grid {
+  gap: 8px;    /* was 8px (from JSX), override for consistency */
+}
+
+/* Individual demo card */
+.login-page .login-demo-card {
+  min-height: 78px;      /* was 68px */
+  gap: 5px;
+  padding: 8px 5px;
+  border-radius: 13px;
+}
+
+/* Icon circle in demo card */
+.login-page .login-demo-card > div:first-of-type {
+  width: 32px !important;   /* was 28px */
+  height: 32px !important;
+  border-radius: 10px !important;
+}
+
+/* Icon inside demo card */
+.login-page .login-demo-card > div:first-of-type svg {
+  width: 18px !important;   /* was 16px */
+  height: 18px !important;
+}
+
+/* Demo role name */
+.login-page .login-demo-card span:nth-of-type(1) {
+  font-size: 12.5px;    /* was 11px */
+  font-weight: 700;
+}
+
+/* Demo email/username */
+.login-page .login-demo-card span:nth-of-type(2) {
+  font-size: 10px;    /* was 9px */
+}
+
+/* Hint text */
+.login-page .login-demo-hint {
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+/* Security note */
+.login-page .login-security-note {
+  margin-top: 12px;
+}
+
+.login-page .login-security-note span {
+  font-size: 11.5px;
+}
+
+/* Copyright */
+.login-page .login-copyright {
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+/* Top accent bar on login card */
+.login-page .login-card .h-1 {
+  height: 3px !important;   /* slightly thicker top-bar accent */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   COMPACT DESKTOP — viewport height ≤ 800px (e.g. 1366×768, 1280×720)
+   Reduce proportionally so nothing overflows. No scrollbar.
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-height: 800px) and (min-width: 1024px) {
+  .login-page .login-left-content {
+    padding: clamp(12px, 1.8vh, 20px) clamp(22px, 2.8vw, 44px);
+  }
+
+  .login-page .login-brand-lockup > div:first-child {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .login-page .login-brand-lockup .text-xl {
+    font-size: 20px !important;
+  }
+
+  .login-page .login-brand-main {
+    gap: clamp(8px, 1.3vh, 14px);
+    padding-block: clamp(6px, 1.1vh, 12px);
+  }
+
+  .login-page .login-eyebrow {
+    margin-bottom: 7px;
+    font-size: 10px;
+  }
+
+  .login-page .login-brand-main h1 {
+    font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+    margin-bottom: 7px;
+  }
+
+  .login-page .login-description {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .login-page .login-illustration svg {
+    max-height: clamp(110px, 20vh, 180px);
+  }
+
+  .login-page .login-stats {
+    gap: clamp(6px, 0.9vh, 10px);
+  }
+
+  .login-page .login-stat-card {
+    min-height: 62px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .login-page .login-stat-card > div:first-child {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .login-page .login-stat-card > div:first-child svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .login-page .login-stat-card .text-sm {
+    font-size: 17px !important;
+  }
+
+  .login-page .login-right-content {
+    padding: clamp(8px, 1.2vh, 16px) clamp(16px, 3vw, 42px);
+  }
+
+  .login-page .login-role-selector {
+    margin-bottom: 10px;
+  }
+
+  .login-page .login-role-card {
+    min-height: 78px;
+    padding: 7px 5px;
+  }
+
+  .login-page .login-role-card > div:first-of-type {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .login-page .login-role-card > div:first-of-type svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .login-page .login-role-card span:nth-of-type(1) {
+    font-size: 12.5px;
+  }
+
+  .login-page .login-card-body {
+    padding: clamp(14px, 1.7vh, 20px) clamp(18px, 2.1vw, 24px);
+  }
+
+  .login-page .login-welcome {
+    margin-bottom: 10px;
+  }
+
+  .login-page .login-welcome h2 {
+    font-size: 18px;
+  }
+
+  .login-page .login-welcome p {
+    font-size: 12px;
+  }
+
+  .login-page .login-form {
+    gap: 9px;
+  }
+
+  .login-page .login-input {
+    min-height: 44px;
+  }
+
+  .login-page .login-submit {
+    min-height: 46px;
+  }
+
+  .login-page .login-demo-section {
+    margin-top: 11px;
+    padding-top: 10px;
+  }
+
+  .login-page .login-demo-card {
+    min-height: 70px;
+    padding: 6px 4px;
+  }
+
+  .login-page .login-demo-card > div:first-of-type {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .login-page .login-demo-card > div:first-of-type svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .login-page .login-demo-hint {
+    margin-top: 5px;
+  }
+
+  .login-page .login-security-note {
+    margin-top: 8px;
+  }
+
+  .login-page .login-copyright {
+    margin-top: 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   VERY COMPACT DESKTOP — viewport height ≤ 720px (e.g. 1280×720)
+   Further compress to keep everything visible without scrolling.
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-height: 720px) and (min-width: 1024px) {
+  .login-page .login-left-content {
+    padding: 10px clamp(20px, 2.6vw, 40px);
+  }
+
+  .login-page .login-brand-lockup > div:first-child {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .login-page .login-brand-lockup .text-xl {
+    font-size: 18px !important;
+  }
+
+  .login-page .login-brand-main {
+    gap: 8px;
+    padding-block: 5px;
+  }
+
+  .login-page .login-brand-main h1 {
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    margin-bottom: 5px;
+  }
+
+  .login-page .login-description {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .login-page .login-illustration svg {
+    max-height: clamp(90px, 16vh, 140px);
+  }
+
+  .login-page .login-stat-card {
+    min-height: 54px;
+    padding: 6px 8px;
+  }
+
+  .login-page .login-stat-card .text-sm {
+    font-size: 15px !important;
+  }
+
+  .login-page .login-role-card {
+    min-height: 70px;
+    padding: 6px 4px;
+  }
+
+  .login-page .login-role-card > div:first-of-type {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .login-page .login-card-body {
+    padding: 12px 18px;
+  }
+
+  .login-page .login-welcome h2 {
+    font-size: 17px;
+  }
+
+  .login-page .login-form {
+    gap: 7px;
+  }
+
+  .login-page .login-input {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .login-page .login-submit {
+    min-height: 42px;
+    font-size: 14px;
+  }
+
+  .login-page .login-demo-section {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .login-page .login-demo-card {
+    min-height: 62px;
+  }
+
+  .login-page .login-security-note,
+  .login-page .login-copyright {
+    margin-top: 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TABLET / SMALL LAPTOP — single-column, right panel only
+   <1024px: left panel hidden; right panel gets full width
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  .login-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login-page .login-left-panel {
+    display: none;
+  }
+
+  .login-page .login-right-content {
+    justify-content: flex-start;
+    padding: 24px 28px;
+  }
+
+  .login-page .login-content {
+    margin-block: auto;
+    max-width: 460px;
+  }
+
+  /* Restore normal sizes on tablet since we have more room */
+  .login-page .login-role-card {
+    min-height: 88px;
+  }
+
+  .login-page .login-input {
+    min-height: 48px;
+  }
+
+  .login-page .login-submit {
+    min-height: 50px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE — small phones, ≤520px
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 520px) {
+  .login-page .login-right-content {
+    padding: 16px 14px;
+  }
+
+  .login-page .login-mobile-brand {
+    margin-bottom: 14px;
+  }
+
+  .login-page .login-role-card {
+    min-height: 76px;
+    padding-inline: 4px;
+  }
+
+  .login-page .login-role-card span:nth-of-type(2) {
+    font-size: 9px;
+  }
+
+  .login-page .login-card-body {
+    padding: 16px 16px;
+  }
+
+  .login-page .login-welcome h2 {
+    font-size: 18px;
+  }
+
+  .login-page .login-demo-grid {
+    gap: 7px;
+  }
+
+  .login-page .login-demo-card {
+    padding-inline: 3px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LARGE / WIDE SCREENS — ≥1600px and ≥1080px height
+   Allow slightly larger values to take advantage of the extra space.
+═══════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1600px) and (min-height: 900px) {
+  .login-page .login-left-content {
+    padding: 32px clamp(44px, 3.5vw, 68px);
+  }
+
+  .login-page .login-brand-lockup > div:first-child {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .login-page .login-brand-lockup .text-xl {
+    font-size: 25px !important;
+  }
+
+  .login-page .login-brand-lockup .text-xs {
+    font-size: 12px !important;
+  }
+
+  .login-page .login-brand-main h1 {
+    font-size: clamp(2rem, 2.8vw, 2.6rem);
+    margin-bottom: 12px;
+  }
+
+  .login-page .login-description {
+    font-size: 15.5px;
+  }
+
+  .login-page .login-illustration svg {
+    max-height: clamp(180px, 29vh, 290px);
+  }
+
+  .login-page .login-stat-card {
+    min-height: 80px;
+    padding: 13px 15px;
+  }
+
+  .login-page .login-stat-card > div:first-child {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .login-page .login-stat-card > div:first-child svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .login-page .login-stat-card .text-sm {
+    font-size: 22px !important;
+  }
+
+  .login-page .login-right-content {
+    padding: clamp(16px, 2.2vh, 28px) clamp(28px, 4vw, 60px);
+  }
+
+  .login-page .login-content {
+    max-width: 500px;
+  }
+
+  .login-page .login-role-card {
+    min-height: 96px;
+    padding: 12px 8px;
+  }
+
+  .login-page .login-role-card > div:first-of-type {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .login-page .login-role-card > div:first-of-type svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .login-page .login-role-card span:nth-of-type(1) {
+    font-size: 15px;
+  }
+
+  .login-page .login-role-card span:nth-of-type(2) {
+    font-size: 11px;
+  }
+
+  .login-page .login-card-body {
+    padding: 28px 30px;
+  }
+
+  .login-page .login-welcome h2 {
+    font-size: 25px;
+  }
+
+  .login-page .login-welcome p {
+    font-size: 14px;
+  }
+
+  .login-page .login-form {
+    gap: 14px;
+  }
+
+  .login-page .login-field-label {
+    font-size: 12px;
+    margin-bottom: 7px;
+  }
+
+  .login-page .login-input {
+    min-height: 52px;
+    font-size: 15px;
+  }
+
+  .login-page .login-submit {
+    min-height: 54px;
+    font-size: 16px;
+  }
+
+  .login-page .login-demo-section {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+
+  .login-page .login-demo-card {
+    min-height: 84px;
+    padding: 10px 6px;
+  }
+
+  .login-page .login-demo-card > div:first-of-type {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .login-page .login-demo-card > div:first-of-type svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .login-page .login-demo-card span:nth-of-type(1) {
+    font-size: 13.5px;
+  }
+
+  .login-page .login-demo-card span:nth-of-type(2) {
+    font-size: 11px;
+  }
+}

@@ -2,19 +2,57 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- ═══════════════════════════════════════════════════
+         FleetOps Favicon
+         The SVG lives in /public/fleetops-logo.svg.
+         Vite copies the entire public/ folder verbatim to
+         dist/ at build time, so the path /fleetops-logo.svg
+         resolves correctly in both dev and production.
+    ═══════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/svg+xml" href="/fleetops-logo.svg" />
+
+    <!-- Fallback PNG favicon for browsers that don't support SVG icons -->
+    <!-- (omit if no PNG is available; SVG covers all modern browsers) -->
+
+    <!-- Apple Touch Icon (home screen shortcut on iOS / macOS Safari) -->
+    <link rel="apple-touch-icon" href="/fleetops-logo.svg" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enterprise Logistics & Fleet Management</title>
+
+    <!-- Project Title -->
+    <title>Delivery Route &amp; Vehicle Capacity Management | FleetOps</title>
+
+    <meta
+      name="description"
+      content="FleetOps - Smart Delivery Route Planning, Vehicle Capacity Management and Enterprise Logistics Platform."
+    />
+
+    <!-- PWA / browser chrome colour matching the dark navy sidebar -->
+    <meta name="theme-color" content="#0F172A" />
+
     <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script type="module" crossorigin src="/assets/index-DDsO-1AW.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-wk3OKA0L.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script type="module" crossorigin src="/assets/index-BclUp29H.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Dng_e4ME.css">
   </head>
+
   <body class="bg-[#F8FAFC] text-[#1E293B] antialiased selection:bg-blue-500 selection:text-white">
-    <div id="root"></div>
+    <div id="root"></div>
+
   </body>
 </html>

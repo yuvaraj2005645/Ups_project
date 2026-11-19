@@ -1,0 +1,27 @@
+{
+  "planHash": "0ffa4cd473349631afd6b53b716e598bd56d746797d9521029c65458bb40a9a8",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-18T04:42:03.2156252Z",
+  "retryCount": 0,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": false,
+    "setupDurationMs": 9248,
+    "setupFailureOutput": "setup step 0 \u0027npm\u0027 failed (exit=1, timedOut=False)\r\nnpm warn ERESOLVE overriding peer dependency\r\nnpm warn While resolving: @vitest/mocker@4.1.12\r\nnpm warn Found: vite@5.4.21\r\nnpm warn node_modules/vite\r\nnpm warn   dev vite@\u0022^5.2.11\u0022 from the root project\r\nnpm warn   1 more (@vitejs/plugin-react)\r\nnpm warn\r\nnpm warn Could not resolve dependency:\r\nnpm warn peerOptional vite@\u0022^6.0.0 || ^7.0.0 || ^8.0.0\u0022 from @vitest/mocker@4.1.12\r\nnpm warn node_modules/@vitest/mocker\r\nnpm warn   @vitest/mocker@\u00224.1.12\u0022 from vitest@4.1.12\r\nnpm warn   node_modules/vitest\r\nnpm warn\r\nnpm warn Conflicting peer dependency: vite@8.3.8\r\nnpm warn node_modules/vite\r\nnpm warn   peerOptional vite@\u0022^6.0.0 || ^7.0.0 || ^8.0.0\u0022 from @vitest/mocker@4.1.12\r\nnpm warn   node_modules/@vitest/mocker\r\nnpm warn     @vitest/mocker@\u00224.1.12\u0022 from vitest@4.1.12\r\nnpm warn     node_modules/vitest\r\nnpm error code EUSAGE\r\nnpm error\r\nnpm error \u0060npm ci\u0060 can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with \u0060npm install\u0060 before continuing.\r\nnpm error\r\nnpm error Missing: esbuild@0.28.2 from lock file\r\nnpm error Missing: @esbuild/aix-ppc64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/android-arm@0.28.2 from lock file\r\nnpm error Missing: @esbuild/android-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/android-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/darwin-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/darwin-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/freebsd-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/freebsd-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-arm@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-ia32@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-loong64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-mips64el@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-ppc64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-riscv64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-s390x@0.28.2 from lock file\r\nnpm error Missing: @esbuild/linux-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/netbsd-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/netbsd-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/openbsd-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/openbsd-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/openharmony-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/sunos-x64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/win32-arm64@0.28.2 from lock file\r\nnpm error Missing: @esbuild/win32-ia32@0.28.2 from lock file\r\nnpm error Missing: @esbuild/win32-x64@0.28.2 from lock file\r\nnpm error\r\nnpm error Clean install a project\r\nnpm error\r\nnpm error Usage:\r\nnpm error npm ci\r\nnpm error\r\nnpm error Options:\r\nnpm error [--install-strategy \u003Choisted|nested|shallow|linked\u003E] [--legacy-bundling]\r\nnpm error [--global-style] [--omit \u003Cdev|optional|peer\u003E [--omit \u003Cdev|optional|peer\u003E ...]]\r\nnpm error [--include \u003Cprod|dev|optional|peer\u003E [--include \u003Cprod|dev|optional|peer\u003E ...]]\r\nnpm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]\r\nnpm error [--no-bin-links] [--no-fund] [--dry-run]\r\nnpm error [-w|--workspace \u003Cworkspace-name\u003E [-w|--workspace \u003Cworkspace-name\u003E ...]]\r\nnpm error [-ws|--workspaces] [--include-workspace-root] [--install-links]\r\nnpm error\r\nnpm error aliases: clean-install, ic, install-clean, isntall-clean\r\nnpm error\r\nnpm error Run \u0022npm help ci\u0022 for more info\r\nnpm error A complete log of this run can be found in: C:\\Users\\hp\\AppData\\Local\\npm-cache\\_logs\\2026-11-18T04_41_54_853Z-debug-0.log\r\n",
+    "assertions": [],
+    "executions": [
+      {
+        "source": "setup[0]",
+        "resolvedExecutable": "C:\\nvm4w\\nodejs\\npm.CMD",
+        "args": [
+          "ci"
+        ],
+        "cwd": "E:\\Delivery Route and Vechicle Capacity Management\\frontend",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}

@@ -6,13 +6,16 @@
 
 ## Overview
 
-FleetOps is a full-stack logistics management demo for coordinating shipments, delivery routes, vehicles, drivers, warehouses, and customers. It includes an administrator/dispatcher workspace and a driver portal backed by a Spring Boot REST API.
+FleetOps is a full-stack logistics management demo for coordinating shipments, delivery routes, vehicles, drivers, warehouses, customers, and delivery proof. It provides role-specific Admin, Dispatcher, and Driver experiences backed by a Spring Boot REST API.
+
+The frontend source uses **JavaScript (ES6) and JSX only**. Application components and services are not written in TypeScript.
 
 **Core Capabilities:**
 - 🗺️ **Route Optimization** – A nearest-neighbor heuristic using Haversine distances reorders stops and compares estimated distance with the input order.
 - 🚛 **Vehicle Capacity Management** – Real-time weight and volume constraint enforcement. Automatically recommends vehicles ranked by fit score. Prevents capacity violations.
 - 📦 **End-to-End Shipment Lifecycle** – From creation to proof-of-delivery with status history tracking.
 - 👨‍✈️ **Driver Portal** – Dedicated interface for drivers to view assignments, navigate routes, update delivery status, and submit digital proof of delivery.
+- 🔐 **Role-Based Login** – Admin, Dispatcher, and Driver login experiences with role-specific branding and demo credential cards.
 - 📊 **Analytics & Reports** – Live dashboard with 6 charts, 5 report types, and CSV export.
 
 ---
@@ -22,17 +25,19 @@ FleetOps is a full-stack logistics management demo for coordinating shipments, d
 ### Frontend
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| React | 18 | UI framework |
-| TypeScript | 5 | Type safety |
+| JavaScript (ES6) + JSX | – | Frontend language and component format; no TypeScript source |
+| React | 18.3 | UI framework |
 | Vite | 5 | Build tool & dev server |
 | Tailwind CSS | 3 | Utility-first styling |
 | React Router DOM | 6 | Client-side routing |
 | Axios | 1.x | HTTP client + JWT interceptors |
 | Recharts | 2.x | Charts & analytics |
-| Lucide React | latest | Icon library |
+| Lucide React | 0.383.x | Icon library |
 | React Hook Form | 7 | Form management |
 | Zod | 3 | Schema validation |
 | React Leaflet + Leaflet | 4/1.9 | Interactive maps (OpenStreetMap) |
+| Vitest | 3.2.x | Frontend test runner |
+| jsdom | 27.x | DOM environment for component tests |
 
 ### Backend
 | Technology | Version | Purpose |
@@ -67,6 +72,10 @@ FleetOps is a full-stack logistics management demo for coordinating shipments, d
 - ✅ Notification center with real-time polling
 - ✅ Settings and profile management
 
+### Shared Authentication
+- ✅ Responsive Admin, Dispatcher, and Driver login experiences
+- ✅ Password visibility, Remember Me, Forgot Password, and role-specific demo credential cards
+
 ### Driver Features
 - ✅ Driver dashboard with today's schedule
 - ✅ View only own assigned shipments
@@ -74,13 +83,15 @@ FleetOps is a full-stack logistics management demo for coordinating shipments, d
 - ✅ Delivery status updates (enforced valid transitions)
 - ✅ Digital proof of delivery (recipient details and signature canvas)
 - ✅ Delivery history and performance stats
+- ✅ Driver self-service profile read/update
 
 ### Security
 - ✅ JWT-based stateless authentication (24-hour tokens)
 - ✅ BCrypt password hashing
 - ✅ Role-based access control (ADMIN, DISPATCHER, DRIVER)
 - ✅ Protected routes on frontend and backend
-- ✅ CORS configured for localhost:5173
+- ✅ Server-side ownership checks for driver shipment and delivery operations
+- ✅ CORS configured for `http://localhost:5173`
 
 ---
 
@@ -93,27 +104,31 @@ Delivery Route and Vehicle Capacity Management/
 │   └── src/main/java/com/fleetops/
 │       ├── FleetOpsApplication.java
 │       ├── config/                   # CORS configuration
-│       ├── security/                 # Stateless JWT security
 │       ├── controller/               # REST API endpoints
 │       ├── service/                  # Business rules and workflows
 │       ├── repository/               # Thread-safe in-memory data store
 │       ├── model/                    # Domain models and enums
 │       ├── dto/                      # Validated API request/response types
 │       ├── exception/                # Domain exceptions and API error handling
-│       └── initializer/              # Startup demo-data seeding
+│       ├── initializer/              # Startup demo-data seeding
+│       └── security/                 # Stateless JWT security
 │
 ├── frontend/                         # Vite React application
+│   ├── index.html
 │   ├── package.json                  # npm scripts and dependencies
-│   ├── vite.config.ts
+│   ├── vite.config.js
 │   ├── tailwind.config.js
+│   ├── public/
 │   └── src/
-│       ├── types/                    # Shared TypeScript domain types
-│       ├── services/                 # Axios client and API modules
+│       ├── App.jsx, main.jsx, index.css
+│       ├── components/               # Shared UI components
 │       ├── contexts/                 # Authentication state
 │       ├── hooks/                    # Reusable UI hooks
-│       ├── components/               # Shared UI components
 │       ├── layouts/                  # Admin, driver, and auth layouts
-│       └── pages/                    # Feature screens
+│       ├── pages/                    # Admin, auth, and driver screens
+│       ├── services/                 # Axios client and API modules (.js)
+│       ├── types/index.js            # Shared JavaScript domain constants
+│       └── utils/                    # Formatting helpers
 │
 └── README.md
 ```
@@ -124,7 +139,7 @@ Delivery Route and Vehicle Capacity Management/
 
 - **JDK 25** – [Download](https://www.oracle.com/java/technologies/downloads/)
 - **Maven 3.9+** – [Download](https://maven.apache.org/download.cgi)
-- **Node.js 18+** – [Download](https://nodejs.org/) (npm is included)
+- **Node.js 20.19+** – [Download](https://nodejs.org/) (npm is included; needed by the frontend test environment)
 - **npm 9+** – Included with Node.js
 
 ---
@@ -152,7 +167,7 @@ API Base URL: **http://localhost:8080/api**
 ```powershell
 cd frontend
 npm ci
-npm run dev
+npm run dev -- --strictPort
 ```
 
 Frontend URL: **http://localhost:5173**
@@ -160,33 +175,35 @@ Frontend URL: **http://localhost:5173**
 > Both servers must be running simultaneously for the application to function.
 > On Windows, run each server in a separate PowerShell terminal. If Java 25 is not the active JDK, set `JAVA_HOME` to your JDK 25 installation before running Maven.
 
-### Build and package
+### Test, build, and package
 
 ```powershell
-# Frontend: TypeScript check and production bundle
+# Frontend JSX tests and production bundle
 cd frontend
+npm test
 npm run build
 
-# Backend: compile, run tests (if present), and package an executable JAR
+# Backend: clean build and executable JAR
 cd ..\backend
-mvn clean package
+mvn clean install
 java -jar target\fleetops-backend-0.0.1-SNAPSHOT.jar
 ```
 
 The frontend production bundle is written to `frontend/dist`. `npm run preview` serves that bundle locally after a build.
+The backend currently has no `src/test` test classes; Maven still runs the test lifecycle as part of `mvn clean install`.
 
 ### Configuration
 
 | Setting | Default | Description |
 |---------|---------|-------------|
 | Backend port | `8080` | Spring Boot HTTP port (`SERVER_PORT` can override it). |
-| Frontend dev port | `5173` | Vite development server port, set in `frontend/vite.config.ts`. |
+| Frontend dev port | `5173` | Vite development server port, set in `frontend/vite.config.js`. |
 | Frontend API URL | `http://localhost:8080/api` | Axios base URL. Override with `VITE_API_URL` (for example, in `frontend/.env.local`). |
-| JWT expiration | `86400000` ms (24 hours) | Override with the Spring property `fleetops.jwt.expiration`. |
-| JWT signing secret | Demo default in backend configuration | Supply a private, suitably strong Base64-encoded key using the Spring property `fleetops.jwt.secret` in any non-demo deployment. |
+| JWT expiration | `86400000` ms (24 hours) | Spring property `fleetops.jwt.expiration`; may be supplied as `FLEETOPS_JWT_EXPIRATION`. |
+| JWT signing secret | Demo-only configuration value | Set `fleetops.jwt.secret` / `FLEETOPS_JWT_SECRET` to a private, strong Base64-encoded key outside local demo use. Never commit production secrets. |
 | Allowed browser origin | `http://localhost:5173` | Configured in `backend/src/main/java/com/fleetops/config/CorsConfig.java`; update it when serving the UI from another origin. |
 
-Spring properties can be supplied through standard Spring Boot configuration, including environment variables (for example, `SERVER_PORT`, `FLEETOPS_JWT_SECRET`, and `FLEETOPS_JWT_EXPIRATION`). Never commit production secrets. The browser map uses OpenStreetMap tiles and needs network access to load them.
+Spring properties can be supplied through standard Spring Boot configuration, including environment variables such as `SERVER_PORT`, `FLEETOPS_JWT_SECRET`, and `FLEETOPS_JWT_EXPIRATION`. Vite variables must use the `VITE_` prefix and are incorporated into the frontend build. The map uses OpenStreetMap tiles and needs network access; browser geolocation requires permission and, outside localhost, a secure HTTPS origin.
 
 ---
 
@@ -215,7 +232,7 @@ Loaded automatically on backend startup:
 | Shipments | 20 | Sampled across pending, scheduled, assigned, in-transit, out-for-delivery, delivered, delayed, and cancelled states (SH-1001 to SH-1020) |
 | Deliveries | 16 | Includes the demo driver's active in-transit delivery |
 | Notifications | 10 | Various types |
-| Shipment History | 20 | Status transition audit log |
+| Shipment History | 23 | Initial status transition audit records |
 
 **Sample Indian Cities with Coordinates:**
 - Chennai: 13.0827°N, 80.2707°E
@@ -277,6 +294,8 @@ DELETE /api/vehicles/{id}
 ```
 GET    /api/drivers
 GET    /api/drivers/{id}
+GET    /api/drivers/me
+PATCH  /api/drivers/me
 POST   /api/drivers
 PUT    /api/drivers/{id}
 DELETE /api/drivers/{id}
@@ -323,6 +342,8 @@ POST   /api/deliveries/{id}/proof
 DELETE /api/deliveries/{id}
 ```
 
+Driver delivery list, detail, status-update, and proof operations are scoped to the authenticated driver's records. Proof submission requires both the delivery and its shipment to be `OUT_FOR_DELIVERY`; a recipient name and signature are required. A delivery photograph is optional in the current request contract.
+
 ### Reports
 ```
 GET    /api/reports/shipments
@@ -343,7 +364,15 @@ PATCH  /api/users/{id}/activate
 PATCH  /api/users/{id}/deactivate
 ```
 
-Most API routes require authentication; user-management operations and selected create/update/delete operations also enforce role checks. The frontend separates administrator/dispatcher screens from the driver portal. The exact role annotations are defined on the corresponding controller methods.
+All API routes outside `/api/auth/**` require a bearer token. Authentication endpoints can be called without a token, but `GET /api/auth/me` returns `401` when there is no authenticated user. Controller-level role checks further restrict writes:
+
+| Role | Access summary |
+|------|----------------|
+| `ADMIN` | Full administrative access, including user and warehouse management and admin-only deletes. |
+| `DISPATCHER` | Operational management for shipments, routes, vehicles, deliveries, drivers, and customers; user administration and admin-only deletes are restricted. |
+| `DRIVER` | Assigned shipments and deliveries, permitted status/proof operations, and own profile operations. Driver ownership is checked server-side. |
+
+Successful responses use the `ApiResponse` envelope (`success`, `message`, `data`, and `timestamp`). Request DTOs and validation rules are in `backend/src/main/java/com/fleetops/dto/`.
 
 ### Notifications
 ```
@@ -461,7 +490,38 @@ Recommendations are estimates; confirming an allocation applies the shipment's w
 | Route stop | `PENDING`, `ARRIVED`, `COMPLETED`, `SKIPPED` |
 | Warehouse | `ACTIVE`, `INACTIVE`, `MAINTENANCE` |
 
-Shipment status changes are validated on the backend. The normal progression is `PENDING → SCHEDULED → ASSIGNED → IN_TRANSIT → OUT_FOR_DELIVERY → DELIVERED`; supported exception paths include delayed, failed-delivery, cancelled, and returned states. See `ShipmentService` for the allowed transitions.
+Shipment status changes are validated on the backend. The current transitions are:
+
+| Current status | Allowed next status |
+|----------------|---------------------|
+| `PENDING` | `SCHEDULED`, `CANCELLED` |
+| `SCHEDULED` | `ASSIGNED`, `CANCELLED` |
+| `ASSIGNED` | `IN_TRANSIT`, `CANCELLED` |
+| `IN_TRANSIT` | `OUT_FOR_DELIVERY`, `DELAYED` |
+| `OUT_FOR_DELIVERY` | `DELIVERED`, `FAILED_DELIVERY` |
+| `DELAYED` | `IN_TRANSIT`, `CANCELLED` |
+| `FAILED_DELIVERY` | `RETURNED`, `IN_TRANSIT` |
+| `DELIVERED`, `CANCELLED`, `RETURNED` | Terminal |
+
+`POST /api/deliveries/{id}/proof` completes the linked shipment through the status-transition service, records recipient details, signature, optional photo and remarks, and updates driver/vehicle assignment metrics. `ShipmentService` and `DeliveryService` are authoritative for the business rules.
+
+## Login and frontend behavior
+
+- The login page supports Admin, Dispatcher, and Driver roles with separate color themes and role-specific panel content.
+- Demo profile cards fill the matching account fields; sign-in still uses the normal authentication API.
+- Password visibility, Remember Me, Forgot Password navigation, and form validation are part of the existing login flow.
+- Desktop uses a two-panel viewport layout. Tablet and mobile use a single-column form layout and allow scrolling when needed.
+- Authentication state is managed by `AuthContext`. The shared Axios instance adds the bearer token and clears stored authentication data after an unauthorized response.
+
+## Troubleshooting
+
+| Symptom | Check |
+|---------|-------|
+| Frontend cannot reach the API or reports CORS errors | Confirm the backend is listening on `8080`, the API base URL is correct, and the browser origin matches `CorsConfig` (`http://localhost:5173` by default). |
+| Login returns `401` or a protected page redirects to login | Restart the backend to reseed demo accounts, use the matching demo email/password, and sign in again to obtain a fresh JWT. |
+| Maven reports Java version or class-file errors | Verify `java --version` and `mvn --version` use JDK 25; run `mvn clean` before recompiling to discard stale generated output. |
+| Map tiles do not appear | Check network access to OpenStreetMap tile servers. |
+| Browser route navigation does not work | Use the Vite dev server or `npm run preview`; opening `index.html` directly does not provide SPA routing. |
 
 ---
 
